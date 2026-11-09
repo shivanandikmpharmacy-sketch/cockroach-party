@@ -59,7 +59,6 @@ export default function Home() {
   const [upiId, setUpiId] = useState("7522809451@axl");
 
   useEffect(() => {
-    // Load Admin Data
     const savedArticles = localStorage.getItem("cmjp_articles");
     if (savedArticles) {
       try {
@@ -119,7 +118,7 @@ export default function Home() {
 
       {/* ABOUT */}
       <section id="about" className="about-section">
-        <div className="about-img-container">
+        <div>
           <img src="/poster.jpg" alt="poster" className="poster-img" />
         </div>
 
@@ -140,7 +139,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* STORY SECTION (Dynamic Stories from Admin) */}
+      {/* STORY SECTION */}
       <section id="story" className="story-section">
         <h2 className="section-title center">CAMPAIGN STORIES</h2>
 
@@ -159,7 +158,6 @@ export default function Home() {
         <p className="section-sub center">Padhiye hamare naye vichar aur purane itihas ke kisse.</p>
 
         <div className="blog-container">
-          {/* Active Article Content */}
           <div className="blog-main-pane">
             <div className="article-meta">
               <span className="date-badge"><Calendar size={14} /> {selectedArticle?.date}</span>
@@ -168,7 +166,6 @@ export default function Home() {
             <p className="active-article-body">{selectedArticle?.content}</p>
           </div>
 
-          {/* Sidebar Headlines Links */}
           <div className="blog-sidebar">
             <h4 className="sidebar-heading"><BookOpen size={18} /> Headlines & Archives</h4>
             <div className="headlines-list">
