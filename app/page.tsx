@@ -1,9 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./globals.css";
-import Login from "../components/Login";
-import { motion } from "framer-motion";
 import {
   Shield,
   Users,
@@ -18,7 +16,6 @@ import {
   Calendar,
 } from "lucide-react";
 
-// Sample Articles Data (Yahan aap apne naye ya purane articles add kar sakte hain)
 const initialArticles = [
   {
     id: 1,
@@ -32,19 +29,30 @@ const initialArticles = [
     date: "Nov 02, 2026",
     content: "Subah subah office ki cab pakadne se lekar raat ko laptop screen ke samne baith kar bug fix karne tak — ek energetic employee ki life aasan nahi hoti. Is article mein humne unke struggle aur entertainment par baat ki hai.",
   },
-  {
-    id: 3,
-    title: "Why Satire is the Best Medicine for Modern Stress",
-    date: "Oct 25, 2026",
-    content: "Jab duniya bohot zyada serious ho jaye, tab thoda hasna aur parody create karna hi eklauta ilaaj bachta hai. Cockroach Mukti Janta Party sirf ek party nahi, ek mood hai!",
-  },
 ];
 
 export default function Home() {
   const [copied, setCopied] = useState(false);
   const [showQr, setShowQr] = useState(false);
+  const [articles, setArticles] = useState(initialArticles);
   const [selectedArticle, setSelectedArticle] = useState(initialArticles[0]);
   const upiId = "7522809451@axl";
+
+  useEffect(() => {
+    const saved = localStorage.getItem("cmjp_articles");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.length > 0) {
+          const merged = [...parsed, ...initialArticles];
+          setArticles(merged);
+          setSelectedArticle(merged[0]);
+        }
+      } catch (err) {
+        console.error("Storage parse error:", err);
+      }
+    }
+  }, []);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(upiId);
@@ -71,38 +79,10 @@ export default function Home() {
         </nav>
       </header>
 
-      {/* HERO SECTION */}
+      {/* HERO SECTION (Clean Image, No overlapping text/yellow box) */}
       <section className="hero">
         <img src="/hero.jpg" alt="hero" className="hero-img" />
         <div className="overlay"></div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="hero-content"
-        >
-          <h1 className="hero-title">
-            COCKROACH MUKTI
-            <br />
-            JANTA PARTY
-          </h1>
-
-          <p className="hero-subtitle">Voice of the energetic employed.</p>
-
-          <div className="hero-buttons">
-            <a href="#join" className="btn-primary">
-              JOIN THE FIGHT
-            </a>
-            <a href="#articles" className="btn-secondary">
-              READ ARTICLES
-            </a>
-          </div>
-
-          <div className="login-box">
-            <Login />
-          </div>
-        </motion.div>
       </section>
 
       {/* ABOUT */}
@@ -150,13 +130,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* BLOG / ARTICLE SYSTEM (NEW) */}
+      {/* ARTICLES & BLOG SECTION (READ-ONLY FOR VISITORS) */}
       <section id="articles" className="articles-section">
         <h2 className="section-title center">CAMPAIGN ARTICLES & BLOGS</h2>
         <p className="section-sub center">Padhiye hamare naye vichar aur purane itihas ke kisse.</p>
 
         <div className="blog-container">
-          {/* Left Side: Active Article Display */}
+          {/* Active Article Content Display */}
           <div className="blog-main-pane">
             <div className="article-meta">
               <span className="date-badge"><Calendar size={14} /> {selectedArticle.date}</span>
@@ -165,11 +145,11 @@ export default function Home() {
             <p className="active-article-body">{selectedArticle.content}</p>
           </div>
 
-          {/* Right Side: Headline Links List (Old & New Articles) */}
+          {/* Sidebar Headlines Links */}
           <div className="blog-sidebar">
             <h4 className="sidebar-heading"><BookOpen size={18} /> Recent & Archive Headlines</h4>
             <div className="headlines-list">
-              {initialArticles.map((art) => (
+              {articles.map((art) => (
                 <div
                   key={art.id}
                   className={`headline-item ${selectedArticle.id === art.id ? "active-headline" : ""}`}
