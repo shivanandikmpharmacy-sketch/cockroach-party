@@ -29,15 +29,7 @@ const initialArticles: ContentItem[] = [
     id: 1,
     title: "Ghar-Ghar se Cockroach Bhagane ka Maha-Abhiyan",
     date: "Nov 08, 2026",
-    content: "Dosto, jaise ki aap sabhi jante hain, modern internet duniya me gyan batne wale log toh hazaron hain, lekin asli safai karne wala koi nahi. Yeh article hamare pehle milestone par adharit hai jahan humne digital cockroach ko expose kiya hai...",
-    image: "",
-  },
-  {
-    id: 2,
-    title: "The Rise of Energetic Employed: Ek Nayi Kranti",
-    date: "Nov 02, 2026",
-    content: "Subah subah office ki cab pakadne se lekar raat ko laptop screen ke samne baith kar bug fix karne tak — ek energetic employee ki life aasan nahi hoti. Is article mein humne unke struggle aur entertainment par baat ki hai.",
-    image: "",
+    content: "Dosto, jaise ki aap sabhi jante hain, modern internet duniya me gyan batne wale log toh hazaron hain, lekin asli safai karne wala koi nahi...",
   },
 ];
 
@@ -47,7 +39,6 @@ const initialStories: ContentItem[] = [
     title: "THE STORY",
     date: "Nov 01, 2026",
     content: "Dosto, internet par chal rahe bade-bade gyan ke capsule khane ke baad, ab market me aaya hai sabse bada revolution — Cockroach Mukti Janta Party!",
-    image: "",
   },
 ];
 
@@ -59,8 +50,15 @@ export default function Home() {
   const [selectedArticle, setSelectedArticle] = useState<ContentItem>(initialArticles[0]);
   const [stories, setStories] = useState<ContentItem[]>(initialStories);
 
+  // Dynamic Settings
   const [aboutText, setAboutText] = useState("Cockroach Mukti Janta Party is a cinematic parody movement focused on satire, entertainment, internet culture and energetic storytelling.");
+  const [visionTitle, setVisionTitle] = useState("Strong Vision");
+  const [teamTitle, setTeamTitle] = useState("Energetic Team");
   const [upiId, setUpiId] = useState("7522809451@axl");
+  const [donateMsg, setDonateMsg] = useState("Help us create more cinematic campaigns, graphics and parody content.");
+  const [phone, setPhone] = useState("+91 9876543210");
+  const [email, setEmail] = useState("info@cockroachparty.in");
+  const [location, setLocation] = useState("India");
 
   useEffect(() => {
     const savedArticles = localStorage.getItem("cmjp_articles");
@@ -82,11 +80,14 @@ export default function Home() {
       } catch (e) {}
     }
 
-    const savedAbout = localStorage.getItem("cmjp_about_text");
-    if (savedAbout) setAboutText(savedAbout);
-
-    const savedUpi = localStorage.getItem("cmjp_upi_id");
-    if (savedUpi) setUpiId(savedUpi);
+    if (localStorage.getItem("cmjp_about_text")) setAboutText(localStorage.getItem("cmjp_about_text")!);
+    if (localStorage.getItem("cmjp_vision_title")) setVisionTitle(localStorage.getItem("cmjp_vision_title")!);
+    if (localStorage.getItem("cmjp_team_title")) setTeamTitle(localStorage.getItem("cmjp_team_title")!);
+    if (localStorage.getItem("cmjp_upi_id")) setUpiId(localStorage.getItem("cmjp_upi_id")!);
+    if (localStorage.getItem("cmjp_donate_msg")) setDonateMsg(localStorage.getItem("cmjp_donate_msg")!);
+    if (localStorage.getItem("cmjp_phone")) setPhone(localStorage.getItem("cmjp_phone")!);
+    if (localStorage.getItem("cmjp_email")) setEmail(localStorage.getItem("cmjp_email")!);
+    if (localStorage.getItem("cmjp_location")) setLocation(localStorage.getItem("cmjp_location")!);
   }, []);
 
   const handleCopy = () => {
@@ -114,7 +115,7 @@ export default function Home() {
         </nav>
       </header>
 
-      {/* HERO SECTION (Clean Image, No overlay/buttons) */}
+      {/* HERO SECTION (MOBILE PERFECT FIT) */}
       <section className="hero">
         <img src="/hero.jpg" alt="hero" className="hero-img" />
       </section>
@@ -131,12 +132,12 @@ export default function Home() {
 
           <div className="card-grid">
             <div className="card">
-              <Shield size={40} className="icon" />
-              <h3>Strong Vision</h3>
+              <Shield size={36} className="icon" />
+              <h3>{visionTitle}</h3>
             </div>
             <div className="card">
-              <Users size={40} className="icon" />
-              <h3>Energetic Team</h3>
+              <Users size={36} className="icon" />
+              <h3>{teamTitle}</h3>
             </div>
           </div>
         </div>
@@ -145,13 +146,12 @@ export default function Home() {
       {/* STORY SECTION */}
       <section id="story" className="story-section">
         <h2 className="section-title center">CAMPAIGN STORIES</h2>
-
         {stories.map((story) => (
           <div key={story.id} className="story-box" style={{ marginBottom: "20px" }}>
             <h3 style={{ color: "orange", marginBottom: "15px" }}>{story.title}</h3>
             {story.image && (
-              <div style={{ marginBottom: "20px", textAlign: "center" }}>
-                <img src={story.image} alt={story.title} style={{ width: "100%", maxHeight: "350px", objectFit: "cover", borderRadius: "10px", border: "1px solid #333" }} />
+              <div style={{ marginBottom: "15px", textAlign: "center" }}>
+                <img src={story.image} alt="" style={{ width: "100%", maxHeight: "350px", objectFit: "cover", borderRadius: "10px" }} />
               </div>
             )}
             <p>{story.content}</p>
@@ -160,7 +160,7 @@ export default function Home() {
         ))}
       </section>
 
-      {/* ARTICLES & BLOG SECTION (Book-style layout: Image on top, text below) */}
+      {/* ARTICLES & BLOG (BOOK STYLE: IMAGE ON TOP, TEXT BELOW) */}
       <section id="articles" className="articles-section">
         <h2 className="section-title center">CAMPAIGN ARTICLES & BLOGS</h2>
         <p className="section-sub center">Padhiye hamare naye vichar aur purane itihas ke kisse.</p>
@@ -168,7 +168,7 @@ export default function Home() {
         <div className="blog-container">
           <div className="blog-main-pane">
             <div className="article-meta">
-              <span className="date-badge"><Calendar size={14} /> {selectedArticle?.date}</span>
+              <span className="date-badge"><Calendar size={13} /> {selectedArticle?.date}</span>
             </div>
             <h3 className="active-article-title">{selectedArticle?.title}</h3>
 
@@ -186,7 +186,7 @@ export default function Home() {
           </div>
 
           <div className="blog-sidebar">
-            <h4 className="sidebar-heading"><BookOpen size={18} /> Headlines & Archives</h4>
+            <h4 className="sidebar-heading"><BookOpen size={16} /> Headlines & Archives</h4>
             <div className="headlines-list">
               {articles.map((art) => (
                 <div
@@ -207,64 +207,38 @@ export default function Home() {
       <section id="join" className="join-section">
         <div className="join-box">
           <h2 className="section-title center">JOIN THE MOVEMENT</h2>
-
-          <form
-            className="join-form"
-            onSubmit={(e) => {
-              e.preventDefault();
-              alert("Application Submitted Successfully!");
-            }}
-          >
+          <form className="join-form" onSubmit={(e) => { e.preventDefault(); alert("Application Submitted!"); }}>
             <input type="text" placeholder="Your Name" required />
             <input type="email" placeholder="Your Email" required />
             <input type="tel" placeholder="Phone Number" required />
-            <textarea
-              rows={4}
-              placeholder="Why do you want to join?"
-              required
-            ></textarea>
-
-            <button type="submit" className="btn-primary">
-              SUBMIT APPLICATION
-            </button>
+            <textarea rows={4} placeholder="Why do you want to join?" required></textarea>
+            <button type="submit" className="btn-primary">SUBMIT APPLICATION</button>
           </form>
         </div>
       </section>
 
       {/* DONATE */}
       <section id="donate" className="donate-section">
-        <BadgeIndianRupee size={70} className="donate-icon" />
-
+        <BadgeIndianRupee size={60} className="donate-icon" />
         <h2 className="section-title center">SUPPORT THE CAMPAIGN</h2>
-
-        <p className="donate-text">
-          Help us create more cinematic campaigns, graphics and parody content.
-        </p>
+        <p className="donate-text">{donateMsg}</p>
 
         <div className="upi-box">
           <h3>DONATE VIA UPI</h3>
           <p className="upi-id">{upiId}</p>
-
           <div className="upi-actions">
             <button className="btn-primary donate-btn" onClick={handleCopy}>
-              {copied ? <Check size={18} /> : <Copy size={18} />}
-              {copied ? "COPIED!" : "COPY UPI ID"}
+              {copied ? <Check size={16} /> : <Copy size={16} />} {copied ? "COPIED!" : "COPY UPI"}
             </button>
-
-            <button
-              className="btn-secondary donate-btn"
-              onClick={() => setShowQr(!showQr)}
-            >
-              <QrCode size={18} />
-              {showQr ? "HIDE QR" : "SHOW QR"}
+            <button className="btn-secondary donate-btn" onClick={() => setShowQr(!showQr)}>
+              <QrCode size={16} /> {showQr ? "HIDE QR" : "SHOW QR"}
             </button>
           </div>
-
           {showQr && (
             <div style={{ marginTop: "20px" }}>
               <img
                 src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=upi://pay?pa=${upiId}&pn=CockroachMuktiParty`}
-                alt="UPI QR Code"
+                alt="UPI QR"
                 style={{ margin: "0 auto", borderRadius: "8px", border: "2px solid #fff" }}
               />
             </div>
@@ -275,25 +249,22 @@ export default function Home() {
       {/* CONTACT */}
       <section id="contact" className="contact-section">
         <div className="contact-card">
-          <Phone size={40} className="icon" />
+          <Phone size={36} className="icon" />
           <h3>Phone</h3>
-          <p>+91 9876543210</p>
+          <p>{phone}</p>
         </div>
-
         <div className="contact-card">
-          <Mail size={40} className="icon" />
+          <Mail size={36} className="icon" />
           <h3>Email</h3>
-          <p>info@cockroachparty.in</p>
+          <p>{email}</p>
         </div>
-
         <div className="contact-card">
-          <MapPin size={40} className="icon" />
+          <MapPin size={36} className="icon" />
           <h3>Location</h3>
-          <p>India</p>
+          <p>{location}</p>
         </div>
       </section>
 
-      {/* FOOTER */}
       <footer className="footer">
         © 2026 COCKROACH MUKTI JANTA PARTY. All Rights Reserved.
       </footer>
