@@ -70,7 +70,6 @@ export default function AdminPage() {
     e.preventDefault();
     const cleanEmail = emailInput.trim().toLowerCase();
 
-    // 🔒 Security Check
     if (cleanEmail !== AUTHORIZED_ADMIN_EMAIL.toLowerCase()) {
       alert("Access Denied! Yeh email address Admin Panel ke liye authorized nahi hai.");
       return;
