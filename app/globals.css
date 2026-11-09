@@ -31,15 +31,15 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 5%;
-  background: rgba(5, 5, 5, 0.9);
+  padding: 15px 5%;
+  background: rgba(5, 5, 5, 0.95);
   backdrop-filter: blur(10px);
   z-index: 1000;
   border-bottom: 1px solid #222;
 }
 
 .logo {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 900;
   color: #fff;
   letter-spacing: 2px;
@@ -52,7 +52,7 @@ body {
 
 .nav-links {
   display: flex;
-  gap: 25px;
+  gap: 20px;
 }
 
 .nav-links a {
@@ -67,41 +67,33 @@ body {
   color: orange;
 }
 
-/* HERO SECTION */
+/* HERO SECTION (MOBILE FIT FIX) */
 .hero {
   position: relative;
   width: 100%;
-  height: 100vh;
+  min-height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 0;
+  background: #000;
+  margin-top: 70px;
 }
 
 .hero-img {
-  position: absolute;
-  inset: 0;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-height: 85vh;
+  object-fit: contain; /* Phone aur PC dono me poori image dikhegi */
   object-position: center;
-  filter: brightness(1.1) contrast(1.05);
-}
-
-.overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 50%, rgba(5,5,5,1) 100%);
-  z-index: 1;
+  filter: brightness(1.05) contrast(1.05);
 }
 
 /* SECTIONS */
 section {
-  padding: 80px 10%;
+  padding: 60px 8%;
 }
 
 .section-title {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 900;
   margin-bottom: 20px;
   color: #fff;
@@ -113,15 +105,15 @@ section {
 
 .section-sub {
   color: #888;
-  margin-bottom: 40px;
-  font-size: 15px;
+  margin-bottom: 30px;
+  font-size: 14px;
 }
 
 /* ABOUT */
 .about-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 50px;
+  gap: 40px;
   align-items: center;
   background: #0a0a0a;
 }
@@ -135,18 +127,18 @@ section {
 .about-text {
   color: #bbb;
   line-height: 1.6;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
 .card-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 15px;
 }
 
 .card {
   background: #141414;
-  padding: 25px;
+  padding: 20px;
   border-radius: 12px;
   border: 1px solid #222;
   text-align: center;
@@ -154,19 +146,19 @@ section {
 
 .card .icon {
   color: orange;
-  margin-bottom: 10px;
+  margin: 0 auto 8px auto;
 }
 
-/* STORY SECTION */
+/* STORY */
 .story-section {
   background: #050505;
 }
 
 .story-box {
   background: #111;
-  padding: 40px;
+  padding: 30px;
   border-radius: 16px;
-  border: 1px solid #333;
+  border: 1px solid #222;
   max-width: 800px;
   margin: 0 auto;
   line-height: 1.8;
@@ -174,12 +166,12 @@ section {
 }
 
 .story-highlight {
-  margin-top: 20px;
+  margin-top: 15px;
   color: orange;
   font-weight: bold;
 }
 
-/* BLOG & ARTICLES */
+/* ARTICLES */
 .articles-section {
   background: #0a0a0a;
 }
@@ -187,20 +179,16 @@ section {
 .blog-container {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 30px;
+  gap: 25px;
   align-items: start;
 }
 
 .blog-main-pane {
   background: #141414;
-  padding: 35px;
+  padding: 30px;
   border-radius: 16px;
   border: 1px solid #222;
-  min-height: 350px;
-}
-
-.article-meta {
-  margin-bottom: 15px;
+  min-height: 300px;
 }
 
 .date-badge {
@@ -212,10 +200,11 @@ section {
   border-radius: 20px;
   font-size: 12px;
   color: orange;
+  margin-bottom: 12px;
 }
 
 .active-article-title {
-  font-size: 26px;
+  font-size: 24px;
   font-weight: bold;
   margin-bottom: 15px;
   color: #fff;
@@ -228,7 +217,7 @@ section {
 
 .blog-sidebar {
   background: #141414;
-  padding: 25px;
+  padding: 20px;
   border-radius: 16px;
   border: 1px solid #222;
 }
@@ -237,97 +226,85 @@ section {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 16px;
-  margin-bottom: 20px;
+  font-size: 15px;
+  margin-bottom: 15px;
   color: orange;
 }
 
 .headlines-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .headline-item {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  padding: 12px;
+  gap: 8px;
+  padding: 10px;
   background: #1a1a1a;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
   border: 1px solid transparent;
 }
 
-.headline-item:hover {
+.headline-item:hover, .active-headline {
   border-color: orange;
-}
-
-.active-headline {
   background: #221a00;
-  border-color: orange;
 }
 
 .bullet-point {
   color: orange;
-  font-size: 12px;
+  font-size: 11px;
   margin-top: 2px;
 }
 
 .headline-text {
-  font-size: 14px;
+  font-size: 13px;
   color: #ddd;
 }
 
-/* JOIN SECTION */
+/* JOIN FORM */
 .join-section {
   background: #050505;
 }
 
 .join-box {
-  max-width: 600px;
+  max-width: 550px;
   margin: 0 auto;
   background: #111;
-  padding: 40px;
+  padding: 35px;
   border-radius: 16px;
-  border: 1px solid #333;
+  border: 1px solid #222;
 }
 
 .join-form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
 }
 
 .join-form input,
 .join-form textarea {
   width: 100%;
-  padding: 14px;
+  padding: 12px;
   background: #1c1c1c;
   border: 1px solid #333;
   color: white;
   border-radius: 8px;
-  font-size: 15px;
+  font-size: 14px;
   outline: none;
 }
 
 .btn-primary {
   background: orange;
   color: black;
-  padding: 14px;
+  padding: 12px;
   font-weight: bold;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  transition: opacity 0.2s;
-}
-
-.btn-primary:hover {
-  opacity: 0.9;
 }
 
 /* DONATE */
@@ -338,69 +315,65 @@ section {
 
 .donate-icon {
   color: orange;
-  margin: 0 auto 20px auto;
+  margin: 0 auto 15px auto;
 }
 
 .donate-text {
   color: #aaa;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
 .upi-box {
   background: #141414;
-  max-width: 500px;
+  max-width: 450px;
   margin: 0 auto;
-  padding: 30px;
+  padding: 25px;
   border-radius: 16px;
   border: 1px solid #222;
 }
 
 .upi-id {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   color: orange;
-  margin: 15px 0 25px 0;
+  margin: 10px 0 20px 0;
 }
 
 .upi-actions {
   display: flex;
   justify-content: center;
-  gap: 15px;
+  gap: 10px;
 }
 
 .donate-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  font-size: 14px;
+  gap: 6px;
+  padding: 10px 16px;
+  font-size: 13px;
 }
 
 .btn-secondary {
   background: #222;
   color: white;
   border: 1px solid #444;
-  padding: 10px 20px;
+  padding: 10px 16px;
   border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
 }
 
 /* CONTACT */
 .contact-section {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
+  gap: 20px;
   background: #050505;
 }
 
 .contact-card {
   background: #111;
-  padding: 30px;
+  padding: 25px;
   border-radius: 12px;
   text-align: center;
   border: 1px solid #222;
@@ -408,40 +381,39 @@ section {
 
 .contact-card .icon {
   color: orange;
-  margin-bottom: 15px;
+  margin: 0 auto 10px auto;
 }
 
-.contact-card h3 {
-  margin-bottom: 8px;
-  color: #fff;
-}
-
-.contact-card p {
-  color: #888;
-  font-size: 14px;
-}
-
-/* FOOTER */
 .footer {
   text-align: center;
-  padding: 30px;
+  padding: 25px;
   background: #020202;
   color: #666;
-  font-size: 13px;
+  font-size: 12px;
   border-top: 1px solid #111;
 }
 
-/* RESPONSIVE DESIGN FOR MOBILE */
+/* RESPONSIVE MOBILE FIXES */
 @media (max-width: 768px) {
   .navbar {
-    padding: 15px 20px;
+    padding: 12px 15px;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
   }
-  
+
   .nav-links {
-    gap: 15px;
-    font-size: 13px;
+    gap: 12px;
+    font-size: 12px;
+  }
+
+  .hero {
+    min-height: 40vh;
+    margin-top: 90px;
+  }
+
+  .hero-img {
+    height: auto;
+    max-height: 50vh;
   }
 
   .about-section,
@@ -451,6 +423,6 @@ section {
   }
 
   section {
-    padding: 60px 5%;
+    padding: 40px 4%;
   }
 }
