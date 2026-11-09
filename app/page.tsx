@@ -21,6 +21,7 @@ interface ContentItem {
   title: string;
   date: string;
   content: string;
+  image?: string;
 }
 
 const initialArticles: ContentItem[] = [
@@ -29,12 +30,14 @@ const initialArticles: ContentItem[] = [
     title: "Ghar-Ghar se Cockroach Bhagane ka Maha-Abhiyan",
     date: "Nov 08, 2026",
     content: "Dosto, jaise ki aap sabhi jante hain, modern internet duniya me gyan batne wale log toh hazaron hain, lekin asli safai karne wala koi nahi. Yeh article hamare pehle milestone par adharit hai jahan humne digital cockroach ko expose kiya hai...",
+    image: "",
   },
   {
     id: 2,
     title: "The Rise of Energetic Employed: Ek Nayi Kranti",
     date: "Nov 02, 2026",
     content: "Subah subah office ki cab pakadne se lekar raat ko laptop screen ke samne baith kar bug fix karne tak — ek energetic employee ki life aasan nahi hoti. Is article mein humne unke struggle aur entertainment par baat ki hai.",
+    image: "",
   },
 ];
 
@@ -44,6 +47,7 @@ const initialStories: ContentItem[] = [
     title: "THE STORY",
     date: "Nov 01, 2026",
     content: "Dosto, internet par chal rahe bade-bade gyan ke capsule khane ke baad, ab market me aaya hai sabse bada revolution — Cockroach Mukti Janta Party!",
+    image: "",
   },
 ];
 
@@ -110,10 +114,9 @@ export default function Home() {
         </nav>
       </header>
 
-      {/* HERO SECTION */}
+      {/* HERO SECTION (Clean Image, No overlay/buttons) */}
       <section className="hero">
         <img src="/hero.jpg" alt="hero" className="hero-img" />
-        <div className="overlay"></div>
       </section>
 
       {/* ABOUT */}
@@ -146,13 +149,18 @@ export default function Home() {
         {stories.map((story) => (
           <div key={story.id} className="story-box" style={{ marginBottom: "20px" }}>
             <h3 style={{ color: "orange", marginBottom: "15px" }}>{story.title}</h3>
+            {story.image && (
+              <div style={{ marginBottom: "20px", textAlign: "center" }}>
+                <img src={story.image} alt={story.title} style={{ width: "100%", maxHeight: "350px", objectFit: "cover", borderRadius: "10px", border: "1px solid #333" }} />
+              </div>
+            )}
             <p>{story.content}</p>
             <p className="story-highlight">Voice of the energetic employed.</p>
           </div>
         ))}
       </section>
 
-      {/* ARTICLES & BLOG SECTION */}
+      {/* ARTICLES & BLOG SECTION (Book-style layout: Image on top, text below) */}
       <section id="articles" className="articles-section">
         <h2 className="section-title center">CAMPAIGN ARTICLES & BLOGS</h2>
         <p className="section-sub center">Padhiye hamare naye vichar aur purane itihas ke kisse.</p>
@@ -163,6 +171,17 @@ export default function Home() {
               <span className="date-badge"><Calendar size={14} /> {selectedArticle?.date}</span>
             </div>
             <h3 className="active-article-title">{selectedArticle?.title}</h3>
+
+            {selectedArticle?.image && (
+              <div style={{ marginBottom: "20px", textAlign: "center" }}>
+                <img
+                  src={selectedArticle.image}
+                  alt={selectedArticle.title}
+                  style={{ width: "100%", maxHeight: "350px", objectFit: "cover", borderRadius: "10px", border: "1px solid #333" }}
+                />
+              </div>
+            )}
+
             <p className="active-article-body">{selectedArticle?.content}</p>
           </div>
 
