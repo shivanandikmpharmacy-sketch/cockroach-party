@@ -50,7 +50,6 @@ export default function Home() {
   const [selectedArticle, setSelectedArticle] = useState<ContentItem>(initialArticles[0]);
   const [stories, setStories] = useState<ContentItem[]>(initialStories);
 
-  // Dynamic Settings
   const [aboutText, setAboutText] = useState("Cockroach Mukti Janta Party is a cinematic parody movement focused on satire, entertainment, internet culture and energetic storytelling.");
   const [visionTitle, setVisionTitle] = useState("Strong Vision");
   const [teamTitle, setTeamTitle] = useState("Energetic Team");
@@ -100,7 +99,6 @@ export default function Home() {
 
   return (
     <main className="main">
-      {/* NAVBAR */}
       <header className="navbar">
         <div>
           <h1 className="logo">CMJP</h1>
@@ -117,12 +115,10 @@ export default function Home() {
         </nav>
       </header>
 
-      {/* HERO SECTION */}
       <section className="hero">
         <img src="/hero.jpg" alt="hero" className="hero-img" />
       </section>
 
-      {/* ABOUT */}
       <section id="about" className="about-section">
         <div>
           <img src="/poster.jpg" alt="poster" className="poster-img" />
@@ -145,7 +141,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* STORY SECTION */}
       <section id="story" className="story-section">
         <h2 className="section-title center">CAMPAIGN STORIES</h2>
         {stories.map((story) => (
@@ -162,7 +157,6 @@ export default function Home() {
         ))}
       </section>
 
-      {/* ARTICLES & BLOG (BOOK STYLE) */}
       <section id="articles" className="articles-section">
         <h2 className="section-title center">CAMPAIGN ARTICLES & BLOGS</h2>
         <p className="section-sub center">Padhiye hamare naye vichar aur purane itihas ke kisse.</p>
@@ -205,7 +199,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* JOIN */}
       <section id="join" className="join-section">
         <div className="join-box">
           <h2 className="section-title center">JOIN THE MOVEMENT</h2>
@@ -219,7 +212,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* DONATE */}
       <section id="donate" className="donate-section">
         <BadgeIndianRupee size={70} className="donate-icon" />
         <h2 className="section-title center">SUPPORT THE CAMPAIGN</h2>
@@ -248,7 +240,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CONTACT */}
       <section id="contact" className="contact-section">
         <div className="contact-card">
           <Phone size={38} className="icon" />
