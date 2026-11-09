@@ -11,43 +11,36 @@ interface ContentItem {
   image?: string;
 }
 
-const defaultArticles: ContentItem[] = [
-  {
-    id: 1,
-    title: "Ghar-Ghar se Cockroach Bhagane ka Maha-Abhiyan",
-    date: "Nov 08, 2026",
-    content: "Dosto, jaise ki aap sabhi jante hain, modern internet duniya me gyan batne wale log toh hazaron hain, lekin asli safai karne wala koi nahi...",
-    image: "",
-  },
-];
-
-const defaultStories: ContentItem[] = [
-  {
-    id: 1,
-    title: "The Origin Story",
-    date: "Nov 01, 2026",
-    content: "Dosto, internet par chal rahe bade-bade gyan ke capsule khane ke baad, ab market me aaya hai sabse bada revolution...",
-    image: "",
-  },
-];
-
 export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [isAuth, setIsAuth] = useState(false);
 
-  const [activeTab, setActiveTab] = useState<"articles" | "stories" | "settings" | "password">("articles");
+  // Tabs: "articles" | "stories" | "about" | "donate" | "contact" | "password"
+  const [activeTab, setActiveTab] = useState<string>("articles");
 
+  // Articles & Stories State
   const [articles, setArticles] = useState<ContentItem[]>([]);
   const [stories, setStories] = useState<ContentItem[]>([]);
-
   const [editingId, setEditingId] = useState<number | null>(null);
   const [itemTitle, setItemTitle] = useState("");
   const [itemContent, setItemContent] = useState("");
   const [itemImage, setItemImage] = useState("");
 
+  // About State
   const [aboutText, setAboutText] = useState("");
-  const [upiId, setUpiId] = useState("");
+  const [visionTitle, setVisionTitle] = useState("Strong Vision");
+  const [teamTitle, setTeamTitle] = useState("Energetic Team");
 
+  // Donate State
+  const [upiId, setUpiId] = useState("");
+  const [donateMessage, setDonateMessage] = useState("");
+
+  // Contact State
+  const [phone, setPhone] = useState("+91 9876543210");
+  const [email, setEmail] = useState("info@cockroachparty.in");
+  const [location, setLocation] = useState("India");
+
+  // Password State
   const [oldPass, setOldPass] = useState("");
   const [newPass, setNewPass] = useState("");
 
@@ -56,24 +49,22 @@ export default function AdminPage() {
   };
 
   useEffect(() => {
+    // Articles & Stories Load
     const savedArticles = localStorage.getItem("cmjp_articles");
-    if (savedArticles) {
-      try { setArticles(JSON.parse(savedArticles)); } catch (e) { setArticles(defaultArticles); }
-    } else {
-      setArticles(defaultArticles);
-      localStorage.setItem("cmjp_articles", JSON.stringify(defaultArticles));
-    }
+    if (savedArticles) try { setArticles(JSON.parse(savedArticles)); } catch (e) {}
 
     const savedStories = localStorage.getItem("cmjp_stories");
-    if (savedStories) {
-      try { setStories(JSON.parse(savedStories)); } catch (e) { setStories(defaultStories); }
-    } else {
-      setStories(defaultStories);
-      localStorage.setItem("cmjp_stories", JSON.stringify(defaultStories));
-    }
+    if (savedStories) try { setStories(JSON.parse(savedStories)); } catch (e) {}
 
+    // Site Settings Load
     setAboutText(localStorage.getItem("cmjp_about_text") || "Cockroach Mukti Janta Party is a cinematic parody movement focused on satire, entertainment, internet culture and energetic storytelling.");
+    setVisionTitle(localStorage.getItem("cmjp_vision_title") || "Strong Vision");
+    setTeamTitle(localStorage.getItem("cmjp_team_title") || "Energetic Team");
     setUpiId(localStorage.getItem("cmjp_upi_id") || "7522809451@axl");
+    setDonateMessage(localStorage.getItem("cmjp_donate_msg") || "Help us create more cinematic campaigns, graphics and parody content.");
+    setPhone(localStorage.getItem("cmjp_phone") || "+91 9876543210");
+    setEmail(localStorage.getItem("cmjp_email") || "info@cockroachparty.in");
+    setLocation(localStorage.getItem("cmjp_location") || "India");
   }, []);
 
   const resetForm = () => {
@@ -87,19 +78,18 @@ export default function AdminPage() {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setItemImage(reader.result as string);
-      };
+      reader.onloadend = () => setItemImage(reader.result as string);
       reader.readAsDataURL(file);
     }
   };
 
+  // Article / Story Save
   const handleSaveItem = (e: React.FormEvent) => {
     e.preventDefault();
     if (!itemTitle.trim() || !itemContent.trim()) return;
 
     const list = activeTab === "articles" ? articles : stories;
-    const storageKey = activeTab === "articles" ? "cmjp_articles" : "cmjp_stories";
+    const key = activeTab === "articles" ? "cmjp_articles" : "cmjp_stories";
     const setter = activeTab === "articles" ? setArticles : setStories;
 
     if (editingId) {
@@ -107,8 +97,8 @@ export default function AdminPage() {
         item.id === editingId ? { ...item, title: itemTitle.trim(), content: itemContent.trim(), image: itemImage } : item
       );
       setter(updated);
-      localStorage.setItem(storageKey, JSON.stringify(updated));
-      alert(`${activeTab === "articles" ? "Article" : "Story"} update ho gaya!`);
+      localStorage.setItem(key, JSON.stringify(updated));
+      alert("Updated successfully!");
     } else {
       const newItem: ContentItem = {
         id: Date.now(),
@@ -119,10 +109,9 @@ export default function AdminPage() {
       };
       const updated = [newItem, ...list];
       setter(updated);
-      localStorage.setItem(storageKey, JSON.stringify(updated));
-      alert(`Naya ${activeTab === "articles" ? "Article" : "Story"} publish ho gaya!`);
+      localStorage.setItem(key, JSON.stringify(updated));
+      alert("Published successfully!");
     }
-
     resetForm();
   };
 
@@ -134,25 +123,33 @@ export default function AdminPage() {
   };
 
   const handleDeleteClick = (id: number) => {
-    if (confirm("Kya aap ise delete karna chahte hain?")) {
+    if (confirm("Delete karna chahte hain?")) {
       const list = activeTab === "articles" ? articles : stories;
-      const storageKey = activeTab === "articles" ? "cmjp_articles" : "cmjp_stories";
+      const key = activeTab === "articles" ? "cmjp_articles" : "cmjp_stories";
       const setter = activeTab === "articles" ? setArticles : setStories;
 
       const updated = list.filter((item) => item.id !== id);
       setter(updated);
-      localStorage.setItem(storageKey, JSON.stringify(updated));
+      localStorage.setItem(key, JSON.stringify(updated));
       if (editingId === id) resetForm();
     }
   };
 
+  // Save General Settings
   const handleSaveSettings = (e: React.FormEvent) => {
     e.preventDefault();
     localStorage.setItem("cmjp_about_text", aboutText);
+    localStorage.setItem("cmjp_vision_title", visionTitle);
+    localStorage.setItem("cmjp_team_title", teamTitle);
     localStorage.setItem("cmjp_upi_id", upiId);
+    localStorage.setItem("cmjp_donate_msg", donateMessage);
+    localStorage.setItem("cmjp_phone", phone);
+    localStorage.setItem("cmjp_email", email);
+    localStorage.setItem("cmjp_location", location);
     alert("Website details update ho gayi!");
   };
 
+  // Password Change
   const handleChangePassword = (e: React.FormEvent) => {
     e.preventDefault();
     if (oldPass !== getCurrentPassword()) {
@@ -160,11 +157,11 @@ export default function AdminPage() {
       return;
     }
     if (!newPass || newPass.length < 4) {
-      alert("Naya password kam se kam 4 aksharon ka hona chahiye!");
+      alert("Naya password kam se kam 4 characters ka hona chahiye!");
       return;
     }
     localStorage.setItem("cmjp_admin_pass", newPass);
-    alert("Password update ho gaya! Dobara login karein.");
+    alert("Password updated! Ab naye password se login karein.");
     setOldPass("");
     setNewPass("");
     setIsAuth(false);
@@ -173,9 +170,9 @@ export default function AdminPage() {
   if (!isAuth) {
     return (
       <div style={{ minHeight: "100vh", background: "#050505", color: "white", display: "flex", justifyContent: "center", alignItems: "center", padding: "20px" }}>
-        <div style={{ background: "#111", border: "2px solid orange", padding: "40px", borderRadius: "16px", width: "100%", maxWidth: "380px", textAlign: "center" }}>
-          <h2 style={{ color: "orange", marginBottom: "10px" }}>CMJP Admin Panel</h2>
-          <p style={{ color: "#888", fontSize: "14px", marginBottom: "20px" }}>Website Owner Control Center</p>
+        <div style={{ background: "#111", border: "2px solid orange", padding: "35px", borderRadius: "16px", width: "100%", maxWidth: "380px", textAlign: "center" }}>
+          <h2 style={{ color: "orange", marginBottom: "8px" }}>CMJP Admin Login</h2>
+          <p style={{ color: "#888", fontSize: "13px", marginBottom: "20px" }}>Website Master Control</p>
           <input
             type="password"
             placeholder="Enter Admin Password"
@@ -185,15 +182,12 @@ export default function AdminPage() {
           />
           <button
             onClick={() => {
-              if (password === getCurrentPassword()) {
-                setIsAuth(true);
-              } else {
-                alert("Galat Password!");
-              }
+              if (password === getCurrentPassword()) setIsAuth(true);
+              else alert("Galat Password!");
             }}
             style={{ width: "100%", padding: "12px", background: "orange", color: "black", border: "none", fontWeight: "bold", borderRadius: "8px", cursor: "pointer" }}
           >
-            LOGIN TO DASHBOARD
+            LOGIN TO ADMIN DASHBOARD
           </button>
         </div>
       </div>
@@ -206,118 +200,86 @@ export default function AdminPage() {
     <div style={{ minHeight: "100vh", background: "#050505", color: "white", padding: "30px 20px" }}>
       <div style={{ maxWidth: "950px", margin: "0 auto", background: "#111", border: "2px solid orange", padding: "30px", borderRadius: "20px" }}>
         
+        {/* Top Controls */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", borderBottom: "1px solid #222", paddingBottom: "15px" }}>
-          <h2 style={{ color: "orange" }}>Admin Dashboard</h2>
+          <h2 style={{ color: "orange" }}>CMJP Control Panel</h2>
           <button onClick={() => setIsAuth(false)} style={{ background: "#333", color: "#fff", border: "none", padding: "6px 14px", borderRadius: "6px", cursor: "pointer", fontSize: "13px" }}>
             Logout
           </button>
         </div>
 
+        {/* Dynamic Navigation Tabs */}
         <div style={{ display: "flex", gap: "10px", marginBottom: "25px", flexWrap: "wrap" }}>
-          <button
-            onClick={() => { setActiveTab("articles"); resetForm(); }}
-            style={{ padding: "10px 18px", borderRadius: "8px", border: "none", fontWeight: "bold", cursor: "pointer", background: activeTab === "articles" ? "orange" : "#222", color: activeTab === "articles" ? "black" : "white" }}
-          >
-            Articles ({articles.length})
-          </button>
-          <button
-            onClick={() => { setActiveTab("stories"); resetForm(); }}
-            style={{ padding: "10px 18px", borderRadius: "8px", border: "none", fontWeight: "bold", cursor: "pointer", background: activeTab === "stories" ? "orange" : "#222", color: activeTab === "stories" ? "black" : "white" }}
-          >
-            Stories ({stories.length})
-          </button>
-          <button
-            onClick={() => { setActiveTab("settings"); resetForm(); }}
-            style={{ padding: "10px 18px", borderRadius: "8px", border: "none", fontWeight: "bold", cursor: "pointer", background: activeTab === "settings" ? "orange" : "#222", color: activeTab === "settings" ? "black" : "white" }}
-          >
-            Website Settings
-          </button>
-          <button
-            onClick={() => { setActiveTab("password"); resetForm(); }}
-            style={{ padding: "10px 18px", borderRadius: "8px", border: "none", fontWeight: "bold", cursor: "pointer", background: activeTab === "password" ? "orange" : "#222", color: activeTab === "password" ? "black" : "white" }}
-          >
-            Change Password
-          </button>
+          {["articles", "stories", "about", "donate", "contact", "password"].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => { setActiveTab(tab); resetForm(); }}
+              style={{
+                padding: "10px 16px",
+                borderRadius: "8px",
+                border: "none",
+                fontWeight: "bold",
+                cursor: "pointer",
+                textTransform: "capitalize",
+                background: activeTab === tab ? "orange" : "#222",
+                color: activeTab === tab ? "black" : "white",
+              }}
+            >
+              {tab === "password" ? "Change Password" : tab}
+            </button>
+          ))}
         </div>
 
+        {/* ARTICLES & STORIES EDIT TAB */}
         {(activeTab === "articles" || activeTab === "stories") && (
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "30px" }}>
-            <form onSubmit={handleSaveItem} style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-              <h3 style={{ color: "orange", fontSize: "18px" }}>
-                {editingId ? `Edit ${activeTab === "articles" ? "Article" : "Story"}` : `Add New ${activeTab === "articles" ? "Article" : "Story"}`}
+            <form onSubmit={handleSaveItem} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              <h3 style={{ color: "orange", fontSize: "16px" }}>
+                {editingId ? "Edit" : "Create"} {activeTab}
               </h3>
-
-              <div>
-                <label style={{ display: "block", color: "#ccc", fontSize: "13px", marginBottom: "4px" }}>Title / Headline:</label>
-                <input
-                  type="text"
-                  placeholder="Headline..."
-                  value={itemTitle}
-                  onChange={(e) => setItemTitle(e.target.value)}
-                  required
-                  style={{ width: "100%", padding: "12px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "8px" }}
-                />
-              </div>
-
-              <div>
-                <label style={{ display: "block", color: "#ccc", fontSize: "13px", marginBottom: "4px" }}>Upload Image (Optional):</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  style={{ width: "100%", padding: "8px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "8px", fontSize: "13px" }}
-                />
-                {itemImage && (
-                  <div style={{ marginTop: "8px" }}>
-                    <img src={itemImage} alt="Preview" style={{ width: "100px", height: "60px", objectFit: "cover", borderRadius: "4px", border: "1px solid orange" }} />
-                    <button type="button" onClick={() => setItemImage("")} style={{ display: "block", background: "none", color: "#f88", border: "none", fontSize: "11px", cursor: "pointer", marginTop: "4px" }}>Remove Image</button>
-                  </div>
-                )}
-              </div>
-
-              <div>
-                <label style={{ display: "block", color: "#ccc", fontSize: "13px", marginBottom: "4px" }}>Content:</label>
-                <textarea
-                  rows={6}
-                  placeholder="Content text..."
-                  value={itemContent}
-                  onChange={(e) => setItemContent(e.target.value)}
-                  required
-                  style={{ width: "100%", padding: "12px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "8px", resize: "none" }}
-                ></textarea>
-              </div>
-
-              <div style={{ display: "flex", gap: "10px" }}>
-                <button type="submit" style={{ flex: 1, padding: "12px", background: "orange", color: "black", border: "none", fontWeight: "bold", borderRadius: "8px", cursor: "pointer" }}>
-                  {editingId ? "UPDATE" : "PUBLISH"}
+              <input
+                type="text"
+                placeholder="Title / Headline..."
+                value={itemTitle}
+                onChange={(e) => setItemTitle(e.target.value)}
+                required
+                style={{ padding: "10px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "6px" }}
+              />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                style={{ padding: "6px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "6px", fontSize: "12px" }}
+              />
+              {itemImage && <img src={itemImage} alt="" style={{ width: "80px", height: "50px", objectFit: "cover", borderRadius: "4px" }} />}
+              <textarea
+                rows={6}
+                placeholder="Content..."
+                value={itemContent}
+                onChange={(e) => setItemContent(e.target.value)}
+                required
+                style={{ padding: "10px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "6px", resize: "none" }}
+              ></textarea>
+              <div style={{ display: "flex", gap: "8px" }}>
+                <button type="submit" style={{ flex: 1, padding: "10px", background: "orange", color: "black", border: "none", fontWeight: "bold", borderRadius: "6px", cursor: "pointer" }}>
+                  {editingId ? "Save Edit" : "Publish"}
                 </button>
-                {editingId && (
-                  <button type="button" onClick={resetForm} style={{ padding: "12px", background: "#333", color: "white", border: "none", borderRadius: "8px", cursor: "pointer" }}>
-                    Cancel
-                  </button>
-                )}
+                {editingId && <button type="button" onClick={resetForm} style={{ padding: "10px", background: "#333", color: "white", border: "none", borderRadius: "6px" }}>Cancel</button>}
               </div>
             </form>
 
             <div>
-              <h3 style={{ color: "#fff", fontSize: "18px", marginBottom: "15px" }}>
-                Manage Published {activeTab === "articles" ? "Articles" : "Stories"}
-              </h3>
-              <div style={{ display: "flex", flexDirection: "column", gap: "12px", maxHeight: "400px", overflowY: "auto" }}>
+              <h3 style={{ color: "#fff", fontSize: "16px", marginBottom: "12px" }}>Manage {activeTab}</h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px", maxHeight: "380px", overflowY: "auto" }}>
                 {currentList.map((item) => (
-                  <div key={item.id} style={{ background: "#181818", padding: "12px", borderRadius: "8px", border: editingId === item.id ? "1px solid orange" : "1px solid #222", display: "flex", gap: "10px", alignItems: "center" }}>
-                    {item.image && <img src={item.image} alt="" style={{ width: "50px", height: "40px", objectFit: "cover", borderRadius: "4px" }} />}
-                    <div style={{ flex: 1 }}>
-                      <h4 style={{ color: "#fff", fontSize: "14px", marginBottom: "2px" }}>{item.title}</h4>
-                      <p style={{ color: "#777", fontSize: "11px", marginBottom: "6px" }}>{item.date}</p>
-                      <div style={{ display: "flex", gap: "8px" }}>
-                        <button onClick={() => handleEditClick(item)} style={{ background: "#222", color: "orange", border: "1px solid orange", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", cursor: "pointer" }}>
-                          Edit
-                        </button>
-                        <button onClick={() => handleDeleteClick(item.id)} style={{ background: "#300", color: "#f88", border: "1px solid #800", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", cursor: "pointer" }}>
-                          Delete
-                        </button>
-                      </div>
+                  <div key={item.id} style={{ background: "#181818", padding: "10px", borderRadius: "6px", border: "1px solid #222", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div>
+                      <h4 style={{ color: "#fff", fontSize: "13px" }}>{item.title}</h4>
+                      <p style={{ color: "#666", fontSize: "10px" }}>{item.date}</p>
+                    </div>
+                    <div style={{ display: "flex", gap: "6px" }}>
+                      <button onClick={() => handleEditClick(item)} style={{ background: "#222", color: "orange", border: "1px solid orange", padding: "3px 8px", borderRadius: "4px", fontSize: "11px", cursor: "pointer" }}>Edit</button>
+                      <button onClick={() => handleDeleteClick(item.id)} style={{ background: "#300", color: "#f88", border: "1px solid #800", padding: "3px 8px", borderRadius: "4px", fontSize: "11px", cursor: "pointer" }}>Del</button>
                     </div>
                   </div>
                 ))}
@@ -326,55 +288,76 @@ export default function AdminPage() {
           </div>
         )}
 
-        {activeTab === "settings" && (
-          <form onSubmit={handleSaveSettings} style={{ display: "flex", flexDirection: "column", gap: "18px", maxWidth: "550px" }}>
-            <h3 style={{ color: "orange", fontSize: "18px" }}>Edit Website Info</h3>
+        {/* ABOUT & MISSION EDIT TAB */}
+        {activeTab === "about" && (
+          <form onSubmit={handleSaveSettings} style={{ display: "flex", flexDirection: "column", gap: "15px", maxWidth: "500px" }}>
+            <h3 style={{ color: "orange" }}>Edit About & Mission Section</h3>
             <div>
-              <label style={{ display: "block", color: "#ccc", fontSize: "13px", marginBottom: "4px" }}>About / Mission Text:</label>
-              <textarea
-                rows={4}
-                value={aboutText}
-                onChange={(e) => setAboutText(e.target.value)}
-                style={{ width: "100%", padding: "12px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "8px" }}
-              ></textarea>
+              <label style={{ fontSize: "12px", color: "#aaa" }}>Mission Text:</label>
+              <textarea rows={4} value={aboutText} onChange={(e) => setAboutText(e.target.value)} style={{ width: "100%", padding: "10px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "6px" }} />
             </div>
             <div>
-              <label style={{ display: "block", color: "#ccc", fontSize: "13px", marginBottom: "4px" }}>UPI ID (Donation):</label>
-              <input
-                type="text"
-                value={upiId}
-                onChange={(e) => setUpiId(e.target.value)}
-                style={{ width: "100%", padding: "12px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "8px" }}
-              />
+              <label style={{ fontSize: "12px", color: "#aaa" }}>Card 1 Title:</label>
+              <input type="text" value={visionTitle} onChange={(e) => setVisionTitle(e.target.value)} style={{ width: "100%", padding: "10px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "6px" }} />
             </div>
-            <button type="submit" style={{ padding: "12px", background: "orange", color: "black", border: "none", fontWeight: "bold", borderRadius: "8px", cursor: "pointer" }}>
-              SAVE SETTINGS
-            </button>
+            <div>
+              <label style={{ fontSize: "12px", color: "#aaa" }}>Card 2 Title:</label>
+              <input type="text" value={teamTitle} onChange={(e) => setTeamTitle(e.target.value)} style={{ width: "100%", padding: "10px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "6px" }} />
+            </div>
+            <button type="submit" style={{ padding: "12px", background: "orange", color: "black", border: "none", fontWeight: "bold", borderRadius: "6px", cursor: "pointer" }}>SAVE ABOUT SECTION</button>
           </form>
         )}
 
+        {/* DONATE & UPI EDIT TAB */}
+        {activeTab === "donate" && (
+          <form onSubmit={handleSaveSettings} style={{ display: "flex", flexDirection: "column", gap: "15px", maxWidth: "500px" }}>
+            <h3 style={{ color: "orange" }}>Edit Donation & UPI Details</h3>
+            <div>
+              <label style={{ fontSize: "12px", color: "#aaa" }}>UPI ID:</label>
+              <input type="text" value={upiId} onChange={(e) => setUpiId(e.target.value)} style={{ width: "100%", padding: "10px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "6px" }} />
+            </div>
+            <div>
+              <label style={{ fontSize: "12px", color: "#aaa" }}>Donate Description:</label>
+              <textarea rows={3} value={donateMessage} onChange={(e) => setDonateMessage(e.target.value)} style={{ width: "100%", padding: "10px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "6px" }} />
+            </div>
+            <button type="submit" style={{ padding: "12px", background: "orange", color: "black", border: "none", fontWeight: "bold", borderRadius: "6px", cursor: "pointer" }}>SAVE DONATE SECTION</button>
+          </form>
+        )}
+
+        {/* CONTACT EDIT TAB */}
+        {activeTab === "contact" && (
+          <form onSubmit={handleSaveSettings} style={{ display: "flex", flexDirection: "column", gap: "15px", maxWidth: "500px" }}>
+            <h3 style={{ color: "orange" }}>Edit Contact Section</h3>
+            <div>
+              <label style={{ fontSize: "12px", color: "#aaa" }}>Phone Number:</label>
+              <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} style={{ width: "100%", padding: "10px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "6px" }} />
+            </div>
+            <div>
+              <label style={{ fontSize: "12px", color: "#aaa" }}>Email Address:</label>
+              <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} style={{ width: "100%", padding: "10px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "6px" }} />
+            </div>
+            <div>
+              <label style={{ fontSize: "12px", color: "#aaa" }}>Location:</label>
+              <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} style={{ width: "100%", padding: "10px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "6px" }} />
+            </div>
+            <button type="submit" style={{ padding: "12px", background: "orange", color: "black", border: "none", fontWeight: "bold", borderRadius: "6px", cursor: "pointer" }}>SAVE CONTACT DETAILS</button>
+          </form>
+        )}
+
+        {/* PASSWORD TAB */}
         {activeTab === "password" && (
           <form onSubmit={handleChangePassword} style={{ display: "flex", flexDirection: "column", gap: "15px", maxWidth: "400px" }}>
-            <h3 style={{ color: "orange", fontSize: "18px" }}>Change Admin Password</h3>
-            <div>
-              <label style={{ display: "block", color: "#ccc", fontSize: "13px", marginBottom: "4px" }}>Purana Password:</label>
-              <input type="password" value={oldPass} onChange={(e) => setOldPass(e.target.value)} required style={{ width: "100%", padding: "12px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "8px" }} />
-            </div>
-            <div>
-              <label style={{ display: "block", color: "#ccc", fontSize: "13px", marginBottom: "4px" }}>Naya Password:</label>
-              <input type="password" value={newPass} onChange={(e) => setNewPass(e.target.value)} required style={{ width: "100%", padding: "12px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "8px" }} />
-            </div>
-            <button type="submit" style={{ padding: "12px", background: "orange", color: "black", border: "none", fontWeight: "bold", borderRadius: "8px", cursor: "pointer" }}>
-              UPDATE PASSWORD
-            </button>
+            <h3 style={{ color: "orange" }}>Change Admin Password</h3>
+            <input type="password" placeholder="Purana Password" value={oldPass} onChange={(e) => setOldPass(e.target.value)} required style={{ padding: "10px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "6px" }} />
+            <input type="password" placeholder="Naya Password" value={newPass} onChange={(e) => setNewPass(e.target.value)} required style={{ padding: "10px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "6px" }} />
+            <button type="submit" style={{ padding: "12px", background: "orange", color: "black", border: "none", fontWeight: "bold", borderRadius: "6px", cursor: "pointer" }}>UPDATE PASSWORD</button>
           </form>
         )}
 
-        <div style={{ marginTop: "30px", textAlign: "center" }}>
-          <Link href="/" style={{ color: "orange", textDecoration: "none", fontSize: "14px" }}>
-            ← Main Website Par Wapas Jayein
-          </Link>
+        <div style={{ marginTop: "25px", textAlign: "center" }}>
+          <Link href="/" style={{ color: "orange", textDecoration: "none", fontSize: "13px" }}>← Main Website Par Wapas Jayein</Link>
         </div>
+
       </div>
     </div>
   );
