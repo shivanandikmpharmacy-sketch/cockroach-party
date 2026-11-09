@@ -8,6 +8,7 @@ interface ContentItem {
   title: string;
   date: string;
   content: string;
+  image?: string;
 }
 
 const defaultArticles: ContentItem[] = [
@@ -15,13 +16,8 @@ const defaultArticles: ContentItem[] = [
     id: 1,
     title: "Ghar-Ghar se Cockroach Bhagane ka Maha-Abhiyan",
     date: "Nov 08, 2026",
-    content: "Dosto, jaise ki aap sabhi jante hain, modern internet duniya me gyan batne wale log toh hazaron hain, lekin asli safai karne wala koi nahi. Yeh article hamare pehle milestone par adharit hai...",
-  },
-  {
-    id: 2,
-    title: "The Rise of Energetic Employed: Ek Nayi Kranti",
-    date: "Nov 02, 2026",
-    content: "Subah subah office ki cab pakadne se lekar raat ko laptop screen ke samne baith kar bug fix karne tak — ek energetic employee ki life aasan nahi hoti...",
+    content: "Dosto, jaise ki aap sabhi jante hain, modern internet duniya me gyan batne wale log toh hazaron hain, lekin asli safai karne wala koi nahi...",
+    image: "",
   },
 ];
 
@@ -30,7 +26,8 @@ const defaultStories: ContentItem[] = [
     id: 1,
     title: "The Origin Story",
     date: "Nov 01, 2026",
-    content: "Dosto, internet par chal rahe bade-bade gyan ke capsule khane ke baad, ab market me aaya hai sabse bada revolution — Cockroach Mukti Janta Party!",
+    content: "Dosto, internet par chal rahe bade-bade gyan ke capsule khane ke baad, ab market me aaya hai sabse bada revolution...",
+    image: "",
   },
 ];
 
@@ -38,23 +35,19 @@ export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [isAuth, setIsAuth] = useState(false);
 
-  // Tab State: "articles" | "stories" | "settings" | "password"
   const [activeTab, setActiveTab] = useState<"articles" | "stories" | "settings" | "password">("articles");
 
-  // Articles & Stories Data
   const [articles, setArticles] = useState<ContentItem[]>([]);
   const [stories, setStories] = useState<ContentItem[]>([]);
 
-  // Form States
   const [editingId, setEditingId] = useState<number | null>(null);
   const [itemTitle, setItemTitle] = useState("");
   const [itemContent, setItemContent] = useState("");
+  const [itemImage, setItemImage] = useState("");
 
-  // Settings State (About & UPI)
   const [aboutText, setAboutText] = useState("");
   const [upiId, setUpiId] = useState("");
 
-  // Password States
   const [oldPass, setOldPass] = useState("");
   const [newPass, setNewPass] = useState("");
 
@@ -63,7 +56,6 @@ export default function AdminPage() {
   };
 
   useEffect(() => {
-    // Load Articles
     const savedArticles = localStorage.getItem("cmjp_articles");
     if (savedArticles) {
       try { setArticles(JSON.parse(savedArticles)); } catch (e) { setArticles(defaultArticles); }
@@ -72,7 +64,6 @@ export default function AdminPage() {
       localStorage.setItem("cmjp_articles", JSON.stringify(defaultArticles));
     }
 
-    // Load Stories
     const savedStories = localStorage.getItem("cmjp_stories");
     if (savedStories) {
       try { setStories(JSON.parse(savedStories)); } catch (e) { setStories(defaultStories); }
@@ -81,7 +72,6 @@ export default function AdminPage() {
       localStorage.setItem("cmjp_stories", JSON.stringify(defaultStories));
     }
 
-    // Load Settings
     setAboutText(localStorage.getItem("cmjp_about_text") || "Cockroach Mukti Janta Party is a cinematic parody movement focused on satire, entertainment, internet culture and energetic storytelling.");
     setUpiId(localStorage.getItem("cmjp_upi_id") || "7522809451@axl");
   }, []);
@@ -90,9 +80,20 @@ export default function AdminPage() {
     setEditingId(null);
     setItemTitle("");
     setItemContent("");
+    setItemImage("");
   };
 
-  // --- SAVE ARTICLE OR STORY ---
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setItemImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSaveItem = (e: React.FormEvent) => {
     e.preventDefault();
     if (!itemTitle.trim() || !itemContent.trim()) return;
@@ -103,7 +104,7 @@ export default function AdminPage() {
 
     if (editingId) {
       const updated = list.map((item) =>
-        item.id === editingId ? { ...item, title: itemTitle.trim(), content: itemContent.trim() } : item
+        item.id === editingId ? { ...item, title: itemTitle.trim(), content: itemContent.trim(), image: itemImage } : item
       );
       setter(updated);
       localStorage.setItem(storageKey, JSON.stringify(updated));
@@ -114,6 +115,7 @@ export default function AdminPage() {
         title: itemTitle.trim(),
         date: new Date().toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" }),
         content: itemContent.trim(),
+        image: itemImage,
       };
       const updated = [newItem, ...list];
       setter(updated);
@@ -128,6 +130,7 @@ export default function AdminPage() {
     setEditingId(item.id);
     setItemTitle(item.title);
     setItemContent(item.content);
+    setItemImage(item.image || "");
   };
 
   const handleDeleteClick = (id: number) => {
@@ -143,7 +146,6 @@ export default function AdminPage() {
     }
   };
 
-  // --- SAVE SETTINGS ---
   const handleSaveSettings = (e: React.FormEvent) => {
     e.preventDefault();
     localStorage.setItem("cmjp_about_text", aboutText);
@@ -151,7 +153,6 @@ export default function AdminPage() {
     alert("Website details update ho gayi!");
   };
 
-  // --- CHANGE PASSWORD ---
   const handleChangePassword = (e: React.FormEvent) => {
     e.preventDefault();
     if (oldPass !== getCurrentPassword()) {
@@ -205,7 +206,6 @@ export default function AdminPage() {
     <div style={{ minHeight: "100vh", background: "#050505", color: "white", padding: "30px 20px" }}>
       <div style={{ maxWidth: "950px", margin: "0 auto", background: "#111", border: "2px solid orange", padding: "30px", borderRadius: "20px" }}>
         
-        {/* Top Header & Logout */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", borderBottom: "1px solid #222", paddingBottom: "15px" }}>
           <h2 style={{ color: "orange" }}>Admin Dashboard</h2>
           <button onClick={() => setIsAuth(false)} style={{ background: "#333", color: "#fff", border: "none", padding: "6px 14px", borderRadius: "6px", cursor: "pointer", fontSize: "13px" }}>
@@ -213,7 +213,6 @@ export default function AdminPage() {
           </button>
         </div>
 
-        {/* Tab Selection Navigation */}
         <div style={{ display: "flex", gap: "10px", marginBottom: "25px", flexWrap: "wrap" }}>
           <button
             onClick={() => { setActiveTab("articles"); resetForm(); }}
@@ -241,10 +240,8 @@ export default function AdminPage() {
           </button>
         </div>
 
-        {/* --- ARTICLES & STORIES TAB --- */}
         {(activeTab === "articles" || activeTab === "stories") && (
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "30px" }}>
-            {/* Form */}
             <form onSubmit={handleSaveItem} style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
               <h3 style={{ color: "orange", fontSize: "18px" }}>
                 {editingId ? `Edit ${activeTab === "articles" ? "Article" : "Story"}` : `Add New ${activeTab === "articles" ? "Article" : "Story"}`}
@@ -263,9 +260,25 @@ export default function AdminPage() {
               </div>
 
               <div>
+                <label style={{ display: "block", color: "#ccc", fontSize: "13px", marginBottom: "4px" }}>Upload Image (Optional):</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  style={{ width: "100%", padding: "8px", background: "#1c1c1c", border: "1px solid #333", color: "white", borderRadius: "8px", fontSize: "13px" }}
+                />
+                {itemImage && (
+                  <div style={{ marginTop: "8px" }}>
+                    <img src={itemImage} alt="Preview" style={{ width: "100px", height: "60px", objectFit: "cover", borderRadius: "4px", border: "1px solid orange" }} />
+                    <button type="button" onClick={() => setItemImage("")} style={{ display: "block", background: "none", color: "#f88", border: "none", fontSize: "11px", cursor: "pointer", marginTop: "4px" }}>Remove Image</button>
+                  </div>
+                )}
+              </div>
+
+              <div>
                 <label style={{ display: "block", color: "#ccc", fontSize: "13px", marginBottom: "4px" }}>Content:</label>
                 <textarea
-                  rows={8}
+                  rows={6}
                   placeholder="Content text..."
                   value={itemContent}
                   onChange={(e) => setItemContent(e.target.value)}
@@ -286,23 +299,25 @@ export default function AdminPage() {
               </div>
             </form>
 
-            {/* List */}
             <div>
               <h3 style={{ color: "#fff", fontSize: "18px", marginBottom: "15px" }}>
                 Manage Published {activeTab === "articles" ? "Articles" : "Stories"}
               </h3>
               <div style={{ display: "flex", flexDirection: "column", gap: "12px", maxHeight: "400px", overflowY: "auto" }}>
                 {currentList.map((item) => (
-                  <div key={item.id} style={{ background: "#181818", padding: "12px", borderRadius: "8px", border: editingId === item.id ? "1px solid orange" : "1px solid #222" }}>
-                    <h4 style={{ color: "#fff", fontSize: "14px", marginBottom: "4px" }}>{item.title}</h4>
-                    <p style={{ color: "#777", fontSize: "11px", marginBottom: "8px" }}>{item.date}</p>
-                    <div style={{ display: "flex", gap: "8px" }}>
-                      <button onClick={() => handleEditClick(item)} style={{ background: "#222", color: "orange", border: "1px solid orange", padding: "4px 10px", borderRadius: "4px", fontSize: "11px", cursor: "pointer" }}>
-                        Edit
-                      </button>
-                      <button onClick={() => handleDeleteClick(item.id)} style={{ background: "#300", color: "#f88", border: "1px solid #800", padding: "4px 10px", borderRadius: "4px", fontSize: "11px", cursor: "pointer" }}>
-                        Delete
-                      </button>
+                  <div key={item.id} style={{ background: "#181818", padding: "12px", borderRadius: "8px", border: editingId === item.id ? "1px solid orange" : "1px solid #222", display: "flex", gap: "10px", alignItems: "center" }}>
+                    {item.image && <img src={item.image} alt="" style={{ width: "50px", height: "40px", objectFit: "cover", borderRadius: "4px" }} />}
+                    <div style={{ flex: 1 }}>
+                      <h4 style={{ color: "#fff", fontSize: "14px", marginBottom: "2px" }}>{item.title}</h4>
+                      <p style={{ color: "#777", fontSize: "11px", marginBottom: "6px" }}>{item.date}</p>
+                      <div style={{ display: "flex", gap: "8px" }}>
+                        <button onClick={() => handleEditClick(item)} style={{ background: "#222", color: "orange", border: "1px solid orange", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", cursor: "pointer" }}>
+                          Edit
+                        </button>
+                        <button onClick={() => handleDeleteClick(item.id)} style={{ background: "#300", color: "#f88", border: "1px solid #800", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", cursor: "pointer" }}>
+                          Delete
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -311,7 +326,6 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* --- SETTINGS TAB --- */}
         {activeTab === "settings" && (
           <form onSubmit={handleSaveSettings} style={{ display: "flex", flexDirection: "column", gap: "18px", maxWidth: "550px" }}>
             <h3 style={{ color: "orange", fontSize: "18px" }}>Edit Website Info</h3>
@@ -339,7 +353,6 @@ export default function AdminPage() {
           </form>
         )}
 
-        {/* --- PASSWORD TAB --- */}
         {activeTab === "password" && (
           <form onSubmit={handleChangePassword} style={{ display: "flex", flexDirection: "column", gap: "15px", maxWidth: "400px" }}>
             <h3 style={{ color: "orange", fontSize: "18px" }}>Change Admin Password</h3>
