@@ -16,7 +16,14 @@ import {
   Calendar,
 } from "lucide-react";
 
-const initialArticles = [
+interface ContentItem {
+  id: number;
+  title: string;
+  date: string;
+  content: string;
+}
+
+const initialArticles: ContentItem[] = [
   {
     id: 1,
     title: "Ghar-Ghar se Cockroach Bhagane ka Maha-Abhiyan",
@@ -31,27 +38,52 @@ const initialArticles = [
   },
 ];
 
+const initialStories: ContentItem[] = [
+  {
+    id: 1,
+    title: "THE STORY",
+    date: "Nov 01, 2026",
+    content: "Dosto, internet par chal rahe bade-bade gyan ke capsule khane ke baad, ab market me aaya hai sabse bada revolution — Cockroach Mukti Janta Party!",
+  },
+];
+
 export default function Home() {
   const [copied, setCopied] = useState(false);
   const [showQr, setShowQr] = useState(false);
-  const [articles, setArticles] = useState(initialArticles);
-  const [selectedArticle, setSelectedArticle] = useState(initialArticles[0]);
-  const upiId = "7522809451@axl";
+
+  const [articles, setArticles] = useState<ContentItem[]>(initialArticles);
+  const [selectedArticle, setSelectedArticle] = useState<ContentItem>(initialArticles[0]);
+  const [stories, setStories] = useState<ContentItem[]>(initialStories);
+
+  const [aboutText, setAboutText] = useState("Cockroach Mukti Janta Party is a cinematic parody movement focused on satire, entertainment, internet culture and energetic storytelling.");
+  const [upiId, setUpiId] = useState("7522809451@axl");
 
   useEffect(() => {
-    const saved = localStorage.getItem("cmjp_articles");
-    if (saved) {
+    // Load Admin Data
+    const savedArticles = localStorage.getItem("cmjp_articles");
+    if (savedArticles) {
       try {
-        const parsed = JSON.parse(saved);
+        const parsed = JSON.parse(savedArticles);
         if (parsed.length > 0) {
-          const merged = [...parsed, ...initialArticles];
-          setArticles(merged);
-          setSelectedArticle(merged[0]);
+          setArticles(parsed);
+          setSelectedArticle(parsed[0]);
         }
-      } catch (err) {
-        console.error("Storage parse error:", err);
-      }
+      } catch (e) {}
     }
+
+    const savedStories = localStorage.getItem("cmjp_stories");
+    if (savedStories) {
+      try {
+        const parsed = JSON.parse(savedStories);
+        if (parsed.length > 0) setStories(parsed);
+      } catch (e) {}
+    }
+
+    const savedAbout = localStorage.getItem("cmjp_about_text");
+    if (savedAbout) setAboutText(savedAbout);
+
+    const savedUpi = localStorage.getItem("cmjp_upi_id");
+    if (savedUpi) setUpiId(savedUpi);
   }, []);
 
   const handleCopy = () => {
@@ -79,7 +111,7 @@ export default function Home() {
         </nav>
       </header>
 
-      {/* HERO SECTION (Clean Image, No overlapping text/yellow box) */}
+      {/* HERO SECTION */}
       <section className="hero">
         <img src="/hero.jpg" alt="hero" className="hero-img" />
         <div className="overlay"></div>
@@ -93,10 +125,7 @@ export default function Home() {
 
         <div>
           <h2 className="section-title">OUR MISSION</h2>
-          <p className="about-text">
-            Cockroach Mukti Janta Party is a cinematic parody movement focused
-            on satire, entertainment, internet culture and energetic storytelling.
-          </p>
+          <p className="about-text">{aboutText}</p>
 
           <div className="card-grid">
             <div className="card">
@@ -111,48 +140,42 @@ export default function Home() {
         </div>
       </section>
 
-      {/* STORY */}
+      {/* STORY SECTION (Dynamic Stories from Admin) */}
       <section id="story" className="story-section">
-        <h2 className="section-title center">THE STORY</h2>
+        <h2 className="section-title center">CAMPAIGN STORIES</h2>
 
-        <div className="story-box">
-          <p>
-            Dosto, internet par chal rahe bade-bade gyan ke capsule khane ke
-            baad, ab market me aaya hai sabse bada revolution —{" "}
-            <span className="orange">Cockroach Mukti Janta Party!</span>
-          </p>
-          <p>
-            Pehle lagta tha ki bade creators desh ke bade muddo par video
-            banate hain. Education system, media bias, political debates...
-          </p>
-          <p>Lekin asli mission toh kuch aur hi nikla — ghar-ghar se cockroach bhagana!</p>
-          <p className="story-highlight">Voice of the energetic employed.</p>
-        </div>
+        {stories.map((story) => (
+          <div key={story.id} className="story-box" style={{ marginBottom: "20px" }}>
+            <h3 style={{ color: "orange", marginBottom: "15px" }}>{story.title}</h3>
+            <p>{story.content}</p>
+            <p className="story-highlight">Voice of the energetic employed.</p>
+          </div>
+        ))}
       </section>
 
-      {/* ARTICLES & BLOG SECTION (READ-ONLY FOR VISITORS) */}
+      {/* ARTICLES & BLOG SECTION */}
       <section id="articles" className="articles-section">
         <h2 className="section-title center">CAMPAIGN ARTICLES & BLOGS</h2>
         <p className="section-sub center">Padhiye hamare naye vichar aur purane itihas ke kisse.</p>
 
         <div className="blog-container">
-          {/* Active Article Content Display */}
+          {/* Active Article Content */}
           <div className="blog-main-pane">
             <div className="article-meta">
-              <span className="date-badge"><Calendar size={14} /> {selectedArticle.date}</span>
+              <span className="date-badge"><Calendar size={14} /> {selectedArticle?.date}</span>
             </div>
-            <h3 className="active-article-title">{selectedArticle.title}</h3>
-            <p className="active-article-body">{selectedArticle.content}</p>
+            <h3 className="active-article-title">{selectedArticle?.title}</h3>
+            <p className="active-article-body">{selectedArticle?.content}</p>
           </div>
 
           {/* Sidebar Headlines Links */}
           <div className="blog-sidebar">
-            <h4 className="sidebar-heading"><BookOpen size={18} /> Recent & Archive Headlines</h4>
+            <h4 className="sidebar-heading"><BookOpen size={18} /> Headlines & Archives</h4>
             <div className="headlines-list">
               {articles.map((art) => (
                 <div
                   key={art.id}
-                  className={`headline-item ${selectedArticle.id === art.id ? "active-headline" : ""}`}
+                  className={`headline-item ${selectedArticle?.id === art.id ? "active-headline" : ""}`}
                   onClick={() => setSelectedArticle(art)}
                 >
                   <span className="bullet-point">▶</span>
