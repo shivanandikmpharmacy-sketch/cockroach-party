@@ -56,6 +56,7 @@ export default function Home() {
   const [teamTitle, setTeamTitle] = useState("Energetic Team");
   const [upiId, setUpiId] = useState("7522809451@axl");
   const [donateMsg, setDonateMsg] = useState("Help us create more cinematic campaigns, graphics and parody content.");
+  const [qrImage, setQrImage] = useState("");
   const [phone, setPhone] = useState("+91 9876543210");
   const [email, setEmail] = useState("info@cockroachparty.in");
   const [location, setLocation] = useState("India");
@@ -85,6 +86,7 @@ export default function Home() {
     if (localStorage.getItem("cmjp_team_title")) setTeamTitle(localStorage.getItem("cmjp_team_title")!);
     if (localStorage.getItem("cmjp_upi_id")) setUpiId(localStorage.getItem("cmjp_upi_id")!);
     if (localStorage.getItem("cmjp_donate_msg")) setDonateMsg(localStorage.getItem("cmjp_donate_msg")!);
+    if (localStorage.getItem("cmjp_qr_image")) setQrImage(localStorage.getItem("cmjp_qr_image")!);
     if (localStorage.getItem("cmjp_phone")) setPhone(localStorage.getItem("cmjp_phone")!);
     if (localStorage.getItem("cmjp_email")) setEmail(localStorage.getItem("cmjp_email")!);
     if (localStorage.getItem("cmjp_location")) setLocation(localStorage.getItem("cmjp_location")!);
@@ -115,7 +117,7 @@ export default function Home() {
         </nav>
       </header>
 
-      {/* HERO SECTION (MOBILE PERFECT FIT) */}
+      {/* HERO SECTION */}
       <section className="hero">
         <img src="/hero.jpg" alt="hero" className="hero-img" />
       </section>
@@ -132,11 +134,11 @@ export default function Home() {
 
           <div className="card-grid">
             <div className="card">
-              <Shield size={36} className="icon" />
+              <Shield size={38} className="icon" />
               <h3>{visionTitle}</h3>
             </div>
             <div className="card">
-              <Users size={36} className="icon" />
+              <Users size={38} className="icon" />
               <h3>{teamTitle}</h3>
             </div>
           </div>
@@ -147,11 +149,11 @@ export default function Home() {
       <section id="story" className="story-section">
         <h2 className="section-title center">CAMPAIGN STORIES</h2>
         {stories.map((story) => (
-          <div key={story.id} className="story-box" style={{ marginBottom: "20px" }}>
+          <div key={story.id} className="story-box" style={{ marginBottom: "25px" }}>
             <h3 style={{ color: "orange", marginBottom: "15px" }}>{story.title}</h3>
             {story.image && (
-              <div style={{ marginBottom: "15px", textAlign: "center" }}>
-                <img src={story.image} alt="" style={{ width: "100%", maxHeight: "350px", objectFit: "cover", borderRadius: "10px" }} />
+              <div style={{ marginBottom: "20px", textAlign: "center" }}>
+                <img src={story.image} alt="" style={{ width: "100%", maxHeight: "380px", objectFit: "cover", borderRadius: "10px" }} />
               </div>
             )}
             <p>{story.content}</p>
@@ -160,7 +162,7 @@ export default function Home() {
         ))}
       </section>
 
-      {/* ARTICLES & BLOG (BOOK STYLE: IMAGE ON TOP, TEXT BELOW) */}
+      {/* ARTICLES & BLOG (BOOK STYLE) */}
       <section id="articles" className="articles-section">
         <h2 className="section-title center">CAMPAIGN ARTICLES & BLOGS</h2>
         <p className="section-sub center">Padhiye hamare naye vichar aur purane itihas ke kisse.</p>
@@ -168,16 +170,16 @@ export default function Home() {
         <div className="blog-container">
           <div className="blog-main-pane">
             <div className="article-meta">
-              <span className="date-badge"><Calendar size={13} /> {selectedArticle?.date}</span>
+              <span className="date-badge"><Calendar size={14} /> {selectedArticle?.date}</span>
             </div>
             <h3 className="active-article-title">{selectedArticle?.title}</h3>
 
             {selectedArticle?.image && (
-              <div style={{ marginBottom: "20px", textAlign: "center" }}>
+              <div style={{ marginBottom: "25px", textAlign: "center" }}>
                 <img
                   src={selectedArticle.image}
                   alt={selectedArticle.title}
-                  style={{ width: "100%", maxHeight: "350px", objectFit: "cover", borderRadius: "10px", border: "1px solid #333" }}
+                  style={{ width: "100%", maxHeight: "380px", objectFit: "cover", borderRadius: "10px", border: "1px solid #333" }}
                 />
               </div>
             )}
@@ -186,7 +188,7 @@ export default function Home() {
           </div>
 
           <div className="blog-sidebar">
-            <h4 className="sidebar-heading"><BookOpen size={16} /> Headlines & Archives</h4>
+            <h4 className="sidebar-heading"><BookOpen size={18} /> Headlines & Archives</h4>
             <div className="headlines-list">
               {articles.map((art) => (
                 <div
@@ -207,7 +209,7 @@ export default function Home() {
       <section id="join" className="join-section">
         <div className="join-box">
           <h2 className="section-title center">JOIN THE MOVEMENT</h2>
-          <form className="join-form" onSubmit={(e) => { e.preventDefault(); alert("Application Submitted!"); }}>
+          <form className="join-form" onSubmit={(e) => { e.preventDefault(); alert("Application Submitted Successfully!"); }}>
             <input type="text" placeholder="Your Name" required />
             <input type="email" placeholder="Your Email" required />
             <input type="tel" placeholder="Phone Number" required />
@@ -219,7 +221,7 @@ export default function Home() {
 
       {/* DONATE */}
       <section id="donate" className="donate-section">
-        <BadgeIndianRupee size={60} className="donate-icon" />
+        <BadgeIndianRupee size={70} className="donate-icon" />
         <h2 className="section-title center">SUPPORT THE CAMPAIGN</h2>
         <p className="donate-text">{donateMsg}</p>
 
@@ -237,9 +239,9 @@ export default function Home() {
           {showQr && (
             <div style={{ marginTop: "20px" }}>
               <img
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=upi://pay?pa=${upiId}&pn=CockroachMuktiParty`}
+                src={qrImage || `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=upi://pay?pa=${upiId}&pn=CockroachMuktiParty`}
                 alt="UPI QR"
-                style={{ margin: "0 auto", borderRadius: "8px", border: "2px solid #fff" }}
+                style={{ width: "160px", height: "160px", margin: "0 auto", borderRadius: "8px", border: "2px solid #fff", objectFit: "cover" }}
               />
             </div>
           )}
@@ -249,17 +251,17 @@ export default function Home() {
       {/* CONTACT */}
       <section id="contact" className="contact-section">
         <div className="contact-card">
-          <Phone size={36} className="icon" />
+          <Phone size={38} className="icon" />
           <h3>Phone</h3>
           <p>{phone}</p>
         </div>
         <div className="contact-card">
-          <Mail size={36} className="icon" />
+          <Mail size={38} className="icon" />
           <h3>Email</h3>
           <p>{email}</p>
         </div>
         <div className="contact-card">
-          <MapPin size={36} className="icon" />
+          <MapPin size={38} className="icon" />
           <h3>Location</h3>
           <p>{location}</p>
         </div>
