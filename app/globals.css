@@ -31,7 +31,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 5%;
+  padding: 18px 6%;
   background: rgba(5, 5, 5, 0.95);
   backdrop-filter: blur(10px);
   z-index: 1000;
@@ -39,7 +39,7 @@ body {
 }
 
 .logo {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 900;
   color: #fff;
   letter-spacing: 2px;
@@ -52,13 +52,13 @@ body {
 
 .nav-links {
   display: flex;
-  gap: 20px;
+  gap: 25px;
 }
 
 .nav-links a {
   color: #ccc;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   transition: color 0.3s ease;
 }
@@ -67,33 +67,34 @@ body {
   color: orange;
 }
 
-/* HERO SECTION (MOBILE FIT FIX) */
+/* HERO SECTION */
 .hero {
   position: relative;
   width: 100%;
-  min-height: 80vh;
+  min-height: 90vh;
   display: flex;
   justify-content: center;
   align-items: center;
   background: #000;
-  margin-top: 70px;
+  margin-top: 75px;
 }
 
 .hero-img {
   width: 100%;
-  max-height: 85vh;
-  object-fit: contain; /* Phone aur PC dono me poori image dikhegi */
+  max-height: 90vh;
+  object-fit: cover;
   object-position: center;
   filter: brightness(1.05) contrast(1.05);
 }
 
 /* SECTIONS */
 section {
-  padding: 60px 8%;
+  padding: 80px 8%;
+  width: 100%;
 }
 
 .section-title {
-  font-size: 28px;
+  font-size: 34px;
   font-weight: 900;
   margin-bottom: 20px;
   color: #fff;
@@ -105,15 +106,15 @@ section {
 
 .section-sub {
   color: #888;
-  margin-bottom: 30px;
-  font-size: 14px;
+  margin-bottom: 40px;
+  font-size: 16px;
 }
 
 /* ABOUT */
 .about-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 40px;
+  gap: 50px;
   align-items: center;
   background: #0a0a0a;
 }
@@ -126,19 +127,20 @@ section {
 
 .about-text {
   color: #bbb;
-  line-height: 1.6;
-  margin-bottom: 25px;
+  line-height: 1.7;
+  font-size: 16px;
+  margin-bottom: 30px;
 }
 
 .card-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 15px;
+  gap: 20px;
 }
 
 .card {
   background: #141414;
-  padding: 20px;
+  padding: 25px;
   border-radius: 12px;
   border: 1px solid #222;
   text-align: center;
@@ -146,7 +148,7 @@ section {
 
 .card .icon {
   color: orange;
-  margin: 0 auto 8px auto;
+  margin: 0 auto 10px auto;
 }
 
 /* STORY */
@@ -156,17 +158,18 @@ section {
 
 .story-box {
   background: #111;
-  padding: 30px;
+  padding: 40px;
   border-radius: 16px;
   border: 1px solid #222;
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
   line-height: 1.8;
   color: #ccc;
+  font-size: 16px;
 }
 
 .story-highlight {
-  margin-top: 15px;
+  margin-top: 20px;
   color: orange;
   font-weight: bold;
 }
@@ -179,16 +182,16 @@ section {
 .blog-container {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 25px;
+  gap: 30px;
   align-items: start;
 }
 
 .blog-main-pane {
   background: #141414;
-  padding: 30px;
+  padding: 35px;
   border-radius: 16px;
   border: 1px solid #222;
-  min-height: 300px;
+  min-height: 350px;
 }
 
 .date-badge {
@@ -196,28 +199,29 @@ section {
   align-items: center;
   gap: 6px;
   background: #222;
-  padding: 4px 10px;
+  padding: 5px 12px;
   border-radius: 20px;
-  font-size: 12px;
+  font-size: 13px;
   color: orange;
-  margin-bottom: 12px;
+  margin-bottom: 15px;
 }
 
 .active-article-title {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
-  margin-bottom: 15px;
+  margin-bottom: 18px;
   color: #fff;
 }
 
 .active-article-body {
   color: #bbb;
-  line-height: 1.7;
+  line-height: 1.8;
+  font-size: 15px;
 }
 
 .blog-sidebar {
   background: #141414;
-  padding: 20px;
+  padding: 25px;
   border-radius: 16px;
   border: 1px solid #222;
 }
@@ -226,22 +230,22 @@ section {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 15px;
-  margin-bottom: 15px;
+  font-size: 16px;
+  margin-bottom: 20px;
   color: orange;
 }
 
 .headlines-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .headline-item {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
-  padding: 10px;
+  gap: 10px;
+  padding: 12px;
   background: #1a1a1a;
   border-radius: 8px;
   cursor: pointer;
@@ -255,12 +259,12 @@ section {
 
 .bullet-point {
   color: orange;
-  font-size: 11px;
+  font-size: 12px;
   margin-top: 2px;
 }
 
 .headline-text {
-  font-size: 13px;
+  font-size: 14px;
   color: #ddd;
 }
 
@@ -270,10 +274,10 @@ section {
 }
 
 .join-box {
-  max-width: 550px;
+  max-width: 650px;
   margin: 0 auto;
   background: #111;
-  padding: 35px;
+  padding: 45px;
   border-radius: 16px;
   border: 1px solid #222;
 }
@@ -281,30 +285,31 @@ section {
 .join-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 15px;
 }
 
 .join-form input,
 .join-form textarea {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   background: #1c1c1c;
   border: 1px solid #333;
   color: white;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 15px;
   outline: none;
 }
 
 .btn-primary {
   background: orange;
   color: black;
-  padding: 12px;
+  padding: 14px;
   font-weight: bold;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   text-align: center;
+  font-size: 15px;
 }
 
 /* DONATE */
@@ -315,49 +320,50 @@ section {
 
 .donate-icon {
   color: orange;
-  margin: 0 auto 15px auto;
+  margin: 0 auto 20px auto;
 }
 
 .donate-text {
   color: #aaa;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
+  font-size: 16px;
 }
 
 .upi-box {
   background: #141414;
-  max-width: 450px;
+  max-width: 500px;
   margin: 0 auto;
-  padding: 25px;
+  padding: 35px;
   border-radius: 16px;
   border: 1px solid #222;
 }
 
 .upi-id {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
   color: orange;
-  margin: 10px 0 20px 0;
+  margin: 15px 0 25px 0;
 }
 
 .upi-actions {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 15px;
 }
 
 .donate-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 10px 16px;
-  font-size: 13px;
+  gap: 8px;
+  padding: 12px 20px;
+  font-size: 14px;
 }
 
 .btn-secondary {
   background: #222;
   color: white;
   border: 1px solid #444;
-  padding: 10px 16px;
+  padding: 12px 20px;
   border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
@@ -367,13 +373,13 @@ section {
 .contact-section {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 30px;
   background: #050505;
 }
 
 .contact-card {
   background: #111;
-  padding: 25px;
+  padding: 35px;
   border-radius: 12px;
   text-align: center;
   border: 1px solid #222;
@@ -381,39 +387,39 @@ section {
 
 .contact-card .icon {
   color: orange;
-  margin: 0 auto 10px auto;
+  margin: 0 auto 15px auto;
 }
 
 .footer {
   text-align: center;
-  padding: 25px;
+  padding: 30px;
   background: #020202;
   color: #666;
-  font-size: 12px;
+  font-size: 13px;
   border-top: 1px solid #111;
 }
 
-/* RESPONSIVE MOBILE FIXES */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .navbar {
-    padding: 12px 15px;
+    padding: 15px 20px;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
   }
 
   .nav-links {
-    gap: 12px;
-    font-size: 12px;
+    gap: 15px;
+    font-size: 13px;
   }
 
   .hero {
-    min-height: 40vh;
-    margin-top: 90px;
+    min-height: 50vh;
+    margin-top: 95px;
   }
 
   .hero-img {
     height: auto;
-    max-height: 50vh;
+    max-height: 60vh;
   }
 
   .about-section,
@@ -423,6 +429,6 @@ section {
   }
 
   section {
-    padding: 40px 4%;
+    padding: 50px 5%;
   }
 }
